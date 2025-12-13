@@ -1,0 +1,6 @@
+@webapi_HostAddress = http://localhost:5023
+
+GET {{webapi_HostAddress}}/api/v2/masterdata/claims/
+Accept: application/json
+
+###
