@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36804.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ae-poc-identity-core", "ae-poc-identity-core\ae-poc-identity-core.csproj", "{1B5136F7-C3DF-434B-BECF-AC264B094665}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ae-poc-identity-storage", "ae-poc-identity-storage\ae-poc-identity-storage.csproj", "{006EBACE-6BC0-444D-845E-F4DDD729A268}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ae-poc-identity-services", "ae-poc-identity-services\ae-poc-identity-services.csproj", "{326E21EF-12FE-4955-9F04-FE9049324789}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ae-poc-identity-webapi", "ae-poc-identity-webapi\ae-poc-identity-webapi.csproj", "{BD23F0FA-2B3A-4E1E-BCC2-429DB18B7313}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B5136F7-C3DF-434B-BECF-AC264B094665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B5136F7-C3DF-434B-BECF-AC264B094665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B5136F7-C3DF-434B-BECF-AC264B094665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B5136F7-C3DF-434B-BECF-AC264B094665}.Release|Any CPU.Build.0 = Release|Any CPU
+		{006EBACE-6BC0-444D-845E-F4DDD729A268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006EBACE-6BC0-444D-845E-F4DDD729A268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006EBACE-6BC0-444D-845E-F4DDD729A268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{006EBACE-6BC0-444D-845E-F4DDD729A268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{326E21EF-12FE-4955-9F04-FE9049324789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{326E21EF-12FE-4955-9F04-FE9049324789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{326E21EF-12FE-4955-9F04-FE9049324789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{326E21EF-12FE-4955-9F04-FE9049324789}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD23F0FA-2B3A-4E1E-BCC2-429DB18B7313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD23F0FA-2B3A-4E1E-BCC2-429DB18B7313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD23F0FA-2B3A-4E1E-BCC2-429DB18B7313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD23F0FA-2B3A-4E1E-BCC2-429DB18B7313}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C06FE360-63AA-4DE4-AC68-468C6C4E2454}
+	EndGlobalSection
+EndGlobal
