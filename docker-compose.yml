@@ -1,0 +1,13 @@
+services:
+  identity-api:
+    image: identity-api
+    build:
+      context: .
+      dockerfile: ae-poc-identity-webapi/Dockerfile
+    ports:
+      - "5023:8080"
+      - "9008:9008"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - Health__Port=9008

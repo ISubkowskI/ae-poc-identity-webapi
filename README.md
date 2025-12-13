@@ -8,12 +8,9 @@ The system enables external clients (like the VS Code MCP Agent) to authenticate
 
 ```mermaid
 graph TD
-    subgraph "External Client Application"
-        lblMCPClient["MCP Client<br/>(VS Code Agent)<br/>(Authentication via Token)"]
-    end
 
-    subgraph "MCP Server"
-        lblMCPServer["MCP Server SSE transport<br/>(Implements MCP)<br/>Port: 8080 (default)"]
+    subgraph "External Application"
+        lblExternalApp["Http Client"]
     end
 
     subgraph "Backend Service (This Repository)"
@@ -25,8 +22,7 @@ graph TD
         lblK8s["Liveness / Readiness Probes"]
     end
 
-    lblMCPClient -- "MCP over SSE" <--> lblMCPServer
-    lblMCPServer -- "HTTP/REST (http://host:5023/api/v1/...)" <--> lblBackendService
+    lblExternalApp -- "HTTP/REST (http://host:5023/api/v1/...)" <--> lblBackendService
     lblK8s -- "HTTP GET (http://host:9008/health/...)" --> lblHealth
 ```
 
@@ -57,6 +53,15 @@ graph TD
    dotnet run
    ```
    The API will start on the ports configured in `launchSettings.json` (usually `http://localhost:5023`).
+
+### Running with Docker
+You can run the application directly using Docker Compose:
+```bash
+docker-compose up -d --build
+```
+This will start the API container mapped to:
+- **API**: `http://localhost:5023`
+- **Health Checks**: `http://localhost:9008`
 
 ### Health Checks
 The application exposes generic health check endpoints on a dedicated port (default: 9008, diagram above shows architecture target 9008).
