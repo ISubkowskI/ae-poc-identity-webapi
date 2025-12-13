@@ -26,15 +26,11 @@ public static class WebApiExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(config);
 
-        services.Configure<IdentityApiOptions>(
-            config.GetSection(IdentityApiOptions.App));
-
-        // Bind the IdentityStorage section from configuration to options
-        services.Configure<IdentityStorageOptions>(
-            config.GetSection(IdentityStorageOptions.IdentityStorage));
-
-        services.Configure<IdentityTokenOptions>(
-           config.GetSection(IdentityTokenOptions.IdentityToken));
+        services
+            .Configure<IdentityApiOptions>(config.GetSection(IdentityApiOptions.App))
+            .Configure<HealthOptions>(config.GetSection(HealthOptions.Health))
+            .Configure<IdentityStorageOptions>(config.GetSection(IdentityStorageOptions.IdentityStorage))
+            .Configure<IdentityTokenOptions>(config.GetSection(IdentityTokenOptions.IdentityToken));
 
         return services;
     }
