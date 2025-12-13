@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:9007
+@baseUrl = http://localhost:9008
 
 ### Liveness Probe (Self)
 GET {{baseUrl}}/health/live
