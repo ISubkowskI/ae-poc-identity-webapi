@@ -20,5 +20,7 @@ public interface IIdentityRepository
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
+    Task<DbAccountIdentity> AddDbAccountIdentityAsync(DbAccountIdentity dbAccount, CancellationToken ct = default);
+
     //Task<DbAppClaim?> UpdateDbAppClaimAsync(DbAppClaim dbAppClaim, CancellationToken ct = default);
 }

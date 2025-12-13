@@ -17,4 +17,6 @@ public interface IIdentityStorageService
     Task<OperationResult<AppClaim>> DeleteClaimAsync(Guid id, CancellationToken ct = default);
 
     Task<OperationResult<AppClaim>> UpdateClaimAsync(Guid id, AppClaim claim, CancellationToken ct = default);
+    
+    Task<OperationResult<AccountRegistrationResult>> CreateAccountAsync(AccountIdentity account, CancellationToken ct = default);
 }

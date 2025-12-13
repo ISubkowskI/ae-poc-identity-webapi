@@ -23,7 +23,7 @@ namespace Ae.Poc.Identity.Repositories
         public async Task<(bool success, DbAccountIdentity? dbAccountIdentity)> TryGetDbAccountIdentityByEmailAsync(string email, CancellationToken ct = default)
         {
             var dbAccountIdentity = await idbContext.AccountIdentities
-                .FirstOrDefaultAsync(_ => _.EmailAddress.Equals(email, StringComparison.OrdinalIgnoreCase), ct);
+                .FirstOrDefaultAsync(_ => _.EmailAddress.ToLower() == email.ToLower(), ct);
 
             return (dbAccountIdentity != null, dbAccountIdentity);
         }
@@ -56,6 +56,13 @@ namespace Ae.Poc.Identity.Repositories
 
         public Task<int> SaveChangesAsync(CancellationToken ct = default)
             => idbContext.SaveChangesAsync(ct);
+
+        public async Task<DbAccountIdentity> AddDbAccountIdentityAsync(DbAccountIdentity dbAccount, CancellationToken ct = default)
+        {
+            var res = await idbContext.AccountIdentities.AddAsync(dbAccount, ct);
+            await idbContext.SaveChangesAsync(ct);
+            return res.Entity;
+        }
 
     }
 }

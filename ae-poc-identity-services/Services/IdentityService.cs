@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Ae.Poc.Identity.Interfaces;
 using Ae.Poc.Identity.Authentication;
 using Ae.Poc.Identity.Data;
+using System.Security.Claims;
 
 namespace Ae.Poc.Identity.Services;
 
@@ -12,19 +13,22 @@ public sealed class IdentityService : IIdentityService
     private readonly ILogger<IdentityService> _logger;
     private readonly IIdentityStorageService _storage;
     private readonly IMapper _mapper;
+    private readonly ITokenService _tokenService;
 
     public IdentityService(
        ILogger<IdentityService> logger,
        IIdentityStorageService storage,
-       IMapper mapper)
+       IMapper mapper,
+       ITokenService tokenService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
     }
 
     public async Task<ClientCredentialsResult> TryVerifyClientCredentialAsync(
-        string email, 
+        string email,
         string password,
         CancellationToken ct = default)
     {
@@ -36,7 +40,7 @@ public sealed class IdentityService : IIdentityService
             {
                 _logger.LogWarning("Incorrect arguments username or password. '{Email}'. {ServiceName} {MethodName}()",
                     email, nameof(IdentityService), nameof(TryVerifyClientCredentialAsync));
-                return new(isVerified: false, infoMessage: "Incorrect arguments username or password.");
+                return new ClientCredentialsResult(isVerified: false, infoMessage: "Incorrect arguments username or password.");
             }
 
             // Verify the credential
@@ -44,29 +48,36 @@ public sealed class IdentityService : IIdentityService
             if (!success)
             {
                 _logger.LogWarning("User not found '{Email}'.", email);
-                return new(isVerified: false, infoMessage: $"User not found '{email}'.");
+                return new ClientCredentialsResult(isVerified: false, infoMessage: $"User not found '{email}'.");
             }
 
             // Check if the account is locked
             if (accountIdentity!.IsLocked)
             {
                 _logger.LogWarning("Account is locked '{Email}'.", email);
-                return new(isVerified: false, infoMessage: $"Account is locked '{email}'.");
+                return new ClientCredentialsResult(isVerified: false, infoMessage: $"Account is locked '{email}'.");
             }
 
             if (new PasswordHasher<AccountIdentity>().VerifyHashedPassword(accountIdentity!, accountIdentity!.PasswordHash, password) == PasswordVerificationResult.Failed)
             {
                 _logger.LogWarning("PASSWORD NOT VERIFIED '{Email}'.", email);
-                return new(isVerified: false, infoMessage: $"The password is incorrect '{email}'.");
+                return new ClientCredentialsResult(isVerified: false, infoMessage: $"The password is incorrect '{email}'.");
             }
 
-            string? accessToken = "ToDo";
-            string? refreshToken = "ToDo";
-            string? tokenType = "Bearer";
-            int? expiresIn = 1000;
-            int? refreshTokenExpiresIn = 2000;
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, accountIdentity.Id.ToString()),
+                new(ClaimTypes.Email, accountIdentity.EmailAddress),
+                new(ClaimTypes.Name, accountIdentity.EmailAddress) // Or a dedicated Name property if available
+            };
 
-            return new(
+            string? accessToken = _tokenService.GenerateAccessToken(claims);
+            string? refreshToken = _tokenService.GenerateRefreshToken();
+            string? tokenType = "Bearer";
+            int? expiresIn = 60; // Assuming minutes from TokenService options, simplified for now
+            int? refreshTokenExpiresIn = 1440; // 1 day
+
+            return new ClientCredentialsResult(
                 isVerified: true,
                 infoMessage: "Ok.",
                 accessToken: accessToken,
@@ -78,7 +89,7 @@ public sealed class IdentityService : IIdentityService
         catch (Exception exc)
         {
             _logger.LogError(exc, "{ServiceName} {MethodName}() ", nameof(IdentityService), nameof(TryVerifyClientCredentialAsync));
-            return new(isVerified: false, infoMessage: $"Error '{exc.Message}'.");
+            return new ClientCredentialsResult(isVerified: false, infoMessage: $"Error '{exc.Message}'.");
         }
     }
 }

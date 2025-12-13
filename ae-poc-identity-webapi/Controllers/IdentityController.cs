@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Ae.Poc.Identity.Services;
+using Ae.Poc.Identity.Authentication;
+using Ae.Poc.Identity.Dtos;
 
 namespace Ae.Poc.Identity.Controllers;
 
@@ -21,7 +23,7 @@ public sealed class IdentityController : ControllerBase
     }
 
     [HttpGet(".well-known/openid-configuration")]
-    public async Task<IActionResult> GetDiscoveryDocumentAsync(string resource, string rel, CancellationToken ct)
+    public async Task<IActionResult> GetDiscoveryDocumentAsync(string? resource, string? rel, CancellationToken ct)
     {
         _logger.LogInformation("Start {MethodName} ...", nameof(GetDiscoveryDocumentAsync));
 
@@ -42,6 +44,30 @@ public sealed class IdentityController : ControllerBase
         return Ok("ToDo");
     }
 
-    //RequestClientCredentialsTokenAsync
+    [HttpPost("token")]
+    [ProducesResponseType(typeof(ClientCredentialsResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> TokenAsync([FromBody] LoginRequestDto request, CancellationToken ct)
+    {
+        _logger.LogInformation("Start {MethodName} ... {Email}", nameof(TokenAsync), request.Email);
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await _identityService.TryVerifyClientCredentialAsync(request.Email, request.Password);
+        
+        if (!result.IsVerified)
+        {
+            // Or Unauthorized or Forbidden based on result details, but sticking to result behavior for now
+            // Returning Ok with IsVerified=false is a valid pattern if client handles it, 
+            // OR return Unauthorized. 
+            // Given ClientCredentialsResult has IsVerified, returning OK is expected if using that DTO.
+            return Ok(result); 
+        }
+
+        return Ok(result);
+    }
 
 }

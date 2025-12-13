@@ -103,6 +103,7 @@ public static class WebApiExtensions
 
         services.AddTransient<IIdentityMasterDataService, IdentityMasterDataService>();
         services.AddTransient<IIdentityAccountsService, IdentityAccountsService>();
+        services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IIdentityService, IdentityService>();
 
         return services;

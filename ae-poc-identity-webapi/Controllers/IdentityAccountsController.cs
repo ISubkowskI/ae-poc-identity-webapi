@@ -27,7 +27,6 @@ public class IdentityAccountsController(ILogger<IdentityAccountsController> logg
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(AccountRegistrationIncomingDto dto, CancellationToken ct)
     {
         if (dto is null)

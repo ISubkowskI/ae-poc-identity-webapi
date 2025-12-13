@@ -145,7 +145,33 @@ namespace Ae.Poc.Identity.UseCases
             //DbAppClaim? res = await identityRepository.UpdateDbAppClaimAsync(dbAppClaim, ct);
 
             var outData = mapper.Map<AppClaim>(dbAppClaim);
+
             return OperationResult<AppClaim>.Success(outData, "Claim successfully updated.");
+        }
+
+        public async Task<OperationResult<AccountRegistrationResult>> CreateAccountAsync(AccountIdentity account, CancellationToken ct = default)
+        {
+            var dbAccount = mapper.Map<DbAccountIdentity>(account);
+            if (dbAccount.Id == Guid.Empty)
+            {
+                dbAccount.Id = Guid.NewGuid();
+            }
+            dbAccount.CreatedAtUtc = DateTimeOffset.UtcNow;
+            
+            // NOTE: Repository method needed? Or AddDbAccountIdentityAsync?
+            // Checking IIdentityRepository... assuming it exists or using DbContext directly if exposed, 
+            // but repository pattern suggests using repo.
+            // Let's assume AddDbAccountIdentityAsync exists or I need to add it too.
+            // Based on AddDbAppClaimAsync naming convention:
+            var created = await identityRepository.AddDbAccountIdentityAsync(dbAccount, ct);
+            
+            var result = new AccountRegistrationResult
+            {
+                Id = created.Id,
+                EmailAddress = created.EmailAddress
+            };
+            
+            return OperationResult<AccountRegistrationResult>.Success(result, "Account created.");
         }
     }
 }

@@ -10,7 +10,8 @@ builder.Services
     .AddAppMapper()
     .AddAppServices();
 
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+builder.Services.AddAntiforgery();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -44,3 +45,5 @@ using (var scope = app.Services.CreateScope())
 }
 
 await app.RunAsync();
+
+public partial class Program { }
