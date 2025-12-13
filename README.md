@@ -14,7 +14,7 @@ graph TD
     end
 
     subgraph "Backend Service (This Repository)"
-        lblBackendService["Identity REST API<br/>ae-poc-identity-webapi.csproj<br/>Port: 5023 (HTTP)"]
+        lblBackendService["Identity REST API<br/>Port: 5023 (HTTP)<br/>In-memory DB"]
         lblHealth["Health Checks / K8s Probes<br/>Port: 9008"]
     end
     
