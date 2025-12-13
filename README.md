@@ -22,7 +22,7 @@ graph TD
         lblK8s["Liveness / Readiness Probes"]
     end
 
-    lblExternalApp -- "HTTP/REST (http://host:5023/api/v1/...)" <--> lblBackendService
+    lblExternalApp -- "HTTP/REST (http://host:5023/api/v2/...)" <--> lblBackendService
     lblK8s -- "HTTP GET (http://host:9008/health/...)" --> lblHealth
 ```
 
