@@ -2,6 +2,7 @@ using Ae.Poc.Identity.DbContexts;
 using Ae.Poc.Identity.Settings;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -113,21 +114,26 @@ public static class HealthCheckExtensions
         return app;
     }
 
+    // Add this static readonly field to cache the JsonSerializerOptions instance
+    private static readonly JsonSerializerOptions CachedJsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        Converters = { new JsonStringEnumConverter() }
+    };
+
     private static Task WriteResponse(HttpContext context, HealthReport report)
     {
-        var jsonOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        };
-        jsonOptions.Converters.Add(new JsonStringEnumConverter());
+        IdentityApiOptions appOptions = context.RequestServices.GetService<IOptions<IdentityApiOptions>>()?.Value;
 
         context.Response.ContentType = "application/json";
 
         var response = new
         {
             Status = report.Status.ToString(),
+            appOptions?.Version,
+            appOptions?.ClientId,
             Duration = report.TotalDuration,
             Entries = report.Entries.Select(e => new
             {
@@ -139,6 +145,7 @@ public static class HealthCheckExtensions
             })
         };
 
-        return context.Response.WriteAsync(JsonSerializer.Serialize(response, jsonOptions));
+        // Use the cached JsonSerializerOptions instance
+        return context.Response.WriteAsync(JsonSerializer.Serialize(response, CachedJsonOptions));
     }
 }
