@@ -1,6 +1,7 @@
+name: ae-poc-identity
 services:
   identity-api:
-    image: identity-api
+    image: identity-api:v1.0.4
     container_name: ae-poc-identity-webapi
     build:
       context: .
