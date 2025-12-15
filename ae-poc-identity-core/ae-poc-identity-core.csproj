@@ -9,11 +9,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
-<<<<<<< .mine
-		<PackageReference Include="AutoMapper" Version="15.1.0" />
-=======
-		<PackageReference Include="AutoMapper" Version="13.0.1" />
->>>>>>> .theirs
 	</ItemGroup>
 
 	<ItemGroup>
