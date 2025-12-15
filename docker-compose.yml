@@ -1,6 +1,7 @@
 services:
   identity-api:
     image: identity-api
+    container_name: ae-poc-identity-webapi
     build:
       context: .
       dockerfile: ae-poc-identity-webapi/Dockerfile
