@@ -7,8 +7,8 @@ services:
       context: .
       dockerfile: ae-poc-identity-webapi/Dockerfile
     ports:
-      - "5023:8080"
-      - "9008:9008"
+      - "5023:8080" # Map host 5023 to container 8080
+      - "9008:9008" # Health checks
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
